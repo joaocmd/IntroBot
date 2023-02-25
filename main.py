@@ -72,6 +72,7 @@ async def set_intro(interaction: discord.Interaction, user_id: int, url: str) ->
     user_id = str(user_id)
     file_id = str(uuid.uuid4()) + '.intro'
     logger.info(f'{user_id} set intro to {url}')
+    await interaction.response.defer(ephemeral=True)
     try:
         if 'youtu' in url:
             download_youtube_audio(url, file_id)
@@ -84,12 +85,12 @@ async def set_intro(interaction: discord.Interaction, user_id: int, url: str) ->
             os.remove(intros[user_id])
         intros[user_id] = file_id
         save_state()
-        await interaction.response.send_message('Done!', ephemeral=True, delete_after=MSG_DURATION)
+        await interaction.followup.send('Done!')
     except:
         if os.path.exists(file_id):
             os.remove(file_id)
         logger.error(f'Error reading file {url}')
-        await interaction.response.send_message(f'Error reading file', ephemeral=True, delete_after=MSG_DURATION)
+        await interaction.followup.send(f'Error reading file')
         traceback.print_exc()
 
 @tree.command(name='setotherupload')

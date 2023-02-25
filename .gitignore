@@ -108,3 +108,4 @@ venv.bak/
 config.json
 discord.log
 *.intro
+intros.json
